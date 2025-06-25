@@ -14,7 +14,6 @@ public class ProjetoController {
         this.projetoDAO = daoFactory.getProjetoDAO();
     }
 
-    // Adiciona um novo projeto
     public void adicionarProjeto(Projeto projeto) {
         try {
             projetoDAO.salvar(projeto);
@@ -24,7 +23,6 @@ public class ProjetoController {
         }
     }
 
-    // Lista todos os projetos do banco
     public List<Projeto> listarProjetos() {
         try {
             return projetoDAO.listarTodos();
@@ -34,7 +32,6 @@ public class ProjetoController {
         }
     }
 
-    // Buscar projeto por ID
     public Projeto buscarProjetoPorId(int id) {
         try {
             return projetoDAO.buscarPorId(id);
@@ -44,7 +41,6 @@ public class ProjetoController {
         }
     }
 
-    // Atualizar um projeto
     public void atualizarProjeto(Projeto projeto) {
         try {
             projetoDAO.atualizar(projeto);
@@ -54,7 +50,6 @@ public class ProjetoController {
         }
     }
 
-    // Remover um projeto
     public void removerProjeto(int id) {
         try {
             projetoDAO.remover(id);

@@ -14,13 +14,11 @@ public class Projeto {
 
 
 
-    // Construtor
     public Projeto(String nome, String descricao) {
         this.nome = nome;
         this.descricao = descricao;
     }
 
-    // Getters e Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

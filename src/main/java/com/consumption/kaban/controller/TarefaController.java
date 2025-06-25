@@ -14,7 +14,6 @@ public class TarefaController {
         this.tarefaDAO = daoFactory.getTarefaDAO();
     }
 
-    // Adiciona uma nova tarefa a um projeto
     public void adicionarTarefa(Tarefa tarefa, int idProjeto) {
         try {
             tarefaDAO.salvar(tarefa, idProjeto);
@@ -24,7 +23,6 @@ public class TarefaController {
         }
     }
 
-    // Retorna lista de tarefas de um projeto
     public List<Tarefa> listarTarefasPorProjeto(int idProjeto) {
         try {
             return tarefaDAO.buscarPorProjeto(idProjeto);
@@ -34,7 +32,6 @@ public class TarefaController {
         }
     }
 
-    // Atualiza dados de uma tarefa
     public void atualizarTarefa(Tarefa tarefa) {
         try {
             tarefaDAO.atualizar(tarefa);
@@ -44,7 +41,6 @@ public class TarefaController {
         }
     }
 
-    // Remove uma tarefa pelo ID
     public void removerTarefa(int idTarefa) {
         try {
             tarefaDAO.excluir(idTarefa);

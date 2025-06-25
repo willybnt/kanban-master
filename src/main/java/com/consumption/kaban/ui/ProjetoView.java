@@ -27,13 +27,11 @@ public class ProjetoView extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Lista de projetos
         projetoListModel = new DefaultListModel<>();
         projetoList = new JList<>(projetoListModel);
         JScrollPane scrollPane = new JScrollPane(projetoList);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Ação de duplo clique para abrir o quadro Kanban do projeto
         projetoList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -58,7 +56,6 @@ public class ProjetoView extends JFrame {
             }
         });
 
-        // Botão de novo projeto
         JButton novoProjetoBtn = new JButton("Novo Projeto");
         novoProjetoBtn.addActionListener(e -> {
             new CadastroProjetoView(this, projetoController);

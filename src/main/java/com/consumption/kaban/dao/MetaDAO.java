@@ -13,7 +13,6 @@ public class MetaDAO {
         this.conn = conn;
     }
 
-    // Salva uma nova meta associada a um projeto (com ou sem prazo)
     public void salvar(Meta meta, int projetoId) throws SQLException {
         if (meta.getComPrazo()) {
             String sql = "INSERT INTO meta (descricao, concluida, prazo, projetoId) VALUES (?, ?, ?, ?)";
@@ -44,7 +43,6 @@ public class MetaDAO {
         }
     }
 
-    // Lista todas as metas de um projeto
     public List<Meta> buscarPorProjeto(int projetoId) throws SQLException {
         List<Meta> metas = new ArrayList<>();
         String sql = "SELECT * FROM meta WHERE projetoId = ?";
@@ -62,7 +60,6 @@ public class MetaDAO {
         return metas;
     }
 
-    // Buscar uma meta pelo ID
     public Meta buscarPorId(int id) throws SQLException {
         String sql = "SELECT * FROM meta WHERE id = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
@@ -79,7 +76,6 @@ public class MetaDAO {
         return null;
     }
 
-    // Atualizar uma meta (com ou sem prazo)
     public void atualizar(Meta meta) throws SQLException {
         String sql = "UPDATE meta SET descricao = ?, concluida = ?, prazo = ? WHERE id = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
@@ -90,7 +86,6 @@ public class MetaDAO {
         stmt.executeUpdate();
     }
 
-    // Remover uma meta
     public void remover(int id) throws SQLException {
         String sql = "DELETE FROM meta WHERE id = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);

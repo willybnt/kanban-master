@@ -23,7 +23,6 @@ public class TarefaDetalheView extends JDialog {
         setSize(400, 250);
         setLocationRelativeTo(parent);
 
-        // Painel com os detalhes
         JPanel painel = new JPanel(new GridLayout(0, 1, 10, 10));
         painel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -36,13 +35,11 @@ public class TarefaDetalheView extends JDialog {
             painel.add(new JLabel("Sem prazo definido"));
         }
 
-        // ComboBox para mudar status
         painel.add(new JLabel("Status:"));
         JComboBox<TarefaStatusEnum> statusCombo = new JComboBox<>(TarefaStatusEnum.values());
         statusCombo.setSelectedItem(tarefa.getStatus());
         painel.add(statusCombo);
 
-        // Botões
         JButton salvarBtn = new JButton("Salvar");
         salvarBtn.addActionListener(e -> {
             TarefaStatusEnum novoStatus = (TarefaStatusEnum) statusCombo.getSelectedItem();
@@ -50,7 +47,7 @@ public class TarefaDetalheView extends JDialog {
                 tarefa.setStatus(novoStatus);
                 tarefaController.atualizarTarefa(tarefa);
                 JOptionPane.showMessageDialog(this, "Status atualizado com sucesso!");
-                aoAtualizar.run();  // Atualiza visualmente no painel kanban
+                aoAtualizar.run();
                 dispose();
             } else {
                 dispose();

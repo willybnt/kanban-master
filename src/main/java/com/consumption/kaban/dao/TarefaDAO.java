@@ -14,7 +14,6 @@ public class TarefaDAO {
         this.conn = conn;
     }
 
-    // Salvar nova tarefa vinculada a um projeto
     public void salvar(Tarefa tarefa, int projetoId) throws SQLException {
         String sql;
         PreparedStatement stmt;
@@ -25,24 +24,23 @@ public class TarefaDAO {
             stmt.setString(1, tarefa.getTitulo());
             stmt.setString(2, tarefa.getDescricao());
             stmt.setString(3, tarefa.getStatus().name());
-            stmt.setDate(4, tarefa.getPrazo()); // ✅ insere prazo normalmente
+            stmt.setDate(4, tarefa.getPrazo()); 
             stmt.setInt(5, projetoId);
-            stmt.setBoolean(6, true); // comPrazo = true
+            stmt.setBoolean(6, true);
         } else {
             sql = "INSERT INTO tarefa (titulo, descricao, status, prazo, projetoId, comPrazo) VALUES (?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, tarefa.getTitulo());
             stmt.setString(2, tarefa.getDescricao());
             stmt.setString(3, tarefa.getStatus().name());
-            stmt.setNull(4, Types.DATE); // ✅ insere NULL no campo prazo
+            stmt.setNull(4, Types.DATE);
             stmt.setInt(5, projetoId);
-            stmt.setBoolean(6, false); // comPrazo = false
+            stmt.setBoolean(6, false); 
         }
 
         stmt.executeUpdate();
     }
 
-    // Listar tarefas de um projeto
     public List<Tarefa> buscarPorProjeto(int projetoId) throws SQLException {
         List<Tarefa> tarefas = new ArrayList<>();
         String sql = "SELECT * FROM tarefa WHERE projetoId = ?";
@@ -56,7 +54,7 @@ public class TarefaDAO {
                     rs.getString("titulo"),
                     rs.getString("descricao"),
                     TarefaStatusEnum.valueOf(rs.getString("status")),
-                    rs.getDate("prazo") // pode ser null aqui
+                    rs.getDate("prazo")
             );
             tarefa.setId(rs.getInt("id"));
             tarefa.setProjetoId(projetoId);
@@ -67,7 +65,6 @@ public class TarefaDAO {
         return tarefas;
     }
 
-    // Atualizar estado e descrição da tarefa
     public void atualizar(Tarefa tarefa) throws SQLException {
         String sql = "UPDATE tarefa SET titulo = ?, descricao = ?, status = ?, prazo = ?, comPrazo = ? WHERE id = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
@@ -86,7 +83,6 @@ public class TarefaDAO {
         stmt.executeUpdate();
     }
 
-    // Excluir tarefa
     public void excluir(int idTarefa) throws SQLException {
         String sql = "DELETE FROM tarefa WHERE id = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);

@@ -13,7 +13,6 @@ public class ProjetoDAO {
         this.conn = conn;
     }
 
-    // Salva novo projeto e recupera o ID gerado
     public void salvar(Projeto projeto) throws SQLException {
         String sql = "INSERT INTO projeto (nome, descricao) VALUES (?, ?)";
         PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -27,7 +26,6 @@ public class ProjetoDAO {
         }
     }
 
-    // Lista todos os projetos
     public List<Projeto> listarTodos() throws SQLException {
         List<Projeto> projetos = new ArrayList<>();
         String sql = "SELECT * FROM projeto";
@@ -46,7 +44,6 @@ public class ProjetoDAO {
         return projetos;
     }
 
-    // Buscar projeto pelo ID
     public Projeto buscarPorId(int id) throws SQLException {
         String sql = "SELECT * FROM projeto WHERE id = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
@@ -62,10 +59,9 @@ public class ProjetoDAO {
             return projeto;
         }
 
-        return null; // não encontrado
+        return null;
     }
 
-    // Atualizar nome e descrição
     public void atualizar(Projeto projeto) throws SQLException {
         String sql = "UPDATE projeto SET nome = ?, descricao = ? WHERE id = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
@@ -75,7 +71,6 @@ public class ProjetoDAO {
         stmt.executeUpdate();
     }
 
-    // Remover projeto por ID
     public void remover(int id) throws SQLException {
         String sql = "DELETE FROM projeto WHERE id = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
