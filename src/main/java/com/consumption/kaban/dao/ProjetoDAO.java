@@ -77,9 +77,24 @@ public class ProjetoDAO {
 
     // Remover projeto por ID
     public void remover(int id) throws SQLException {
-        String sql = "DELETE FROM projeto WHERE id = ?";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setInt(1, id);
-        stmt.executeUpdate();
+        // 1. Remove metas vinculadas ao projeto
+        String sqlRemoveMetas = "DELETE FROM meta WHERE projetoId = ?";
+        PreparedStatement stmtMeta = conn.prepareStatement(sqlRemoveMetas);
+        stmtMeta.setInt(1, id);
+        stmtMeta.executeUpdate();
+
+        // 2. Remove tarefas vinculadas ao projeto
+        String sqlRemoveTarefas = "DELETE FROM tarefa WHERE projetoId = ?";
+        PreparedStatement stmtTarefa = conn.prepareStatement(sqlRemoveTarefas);
+        stmtTarefa.setInt(1, id);
+        stmtTarefa.executeUpdate();
+
+        // 3. Remove o projeto
+        String sqlRemoveProjeto = "DELETE FROM projeto WHERE id = ?";
+        PreparedStatement stmtProjeto = conn.prepareStatement(sqlRemoveProjeto);
+        stmtProjeto.setInt(1, id);
+        stmtProjeto.executeUpdate();
     }
+
+
 }

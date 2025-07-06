@@ -37,7 +37,7 @@ public class Meta {
     public Meta(String descricao, Date prazo,boolean concluida) {
         this.descricao = descricao;
         this.prazo = prazo;
-        this.concluida = false;
+        this.concluida = concluida;
     }
 
     // Getters e Setters

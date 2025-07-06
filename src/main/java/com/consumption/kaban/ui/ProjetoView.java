@@ -19,21 +19,24 @@ public class ProjetoView extends JFrame {
     public ProjetoView() throws SQLException {
         super("Projetos");
 
+        // Configuração do DAO e Controller
         DAOFactory daoFactory = new DAOFactory();
         projetoController = new ProjetoController(daoFactory);
 
-        setSize(400, 300);
+        // Configurações da janela
+        setSize(500, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(10, 10));
 
         // Lista de projetos
         projetoListModel = new DefaultListModel<>();
         projetoList = new JList<>(projetoListModel);
+        projetoList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPane = new JScrollPane(projetoList);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Ação de duplo clique para abrir o quadro Kanban do projeto
+        // Duplo clique para abrir detalhes do projeto
         projetoList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -43,35 +46,72 @@ public class ProjetoView extends JFrame {
                         try {
                             int idProjeto = Integer.parseInt(selecionado.split(" - ")[0]);
                             Projeto projeto = projetoController.buscarProjetoPorId(idProjeto);
-
                             if (projeto != null) {
                                 new ProjetoDetalheView(projeto, new DAOFactory());
                             } else {
-                                JOptionPane.showMessageDialog(null, "Projeto não encontrado.");
+                                JOptionPane.showMessageDialog(ProjetoView.this, "Projeto não encontrado.");
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            JOptionPane.showMessageDialog(null, "Erro ao abrir projeto.");
+                            JOptionPane.showMessageDialog(ProjetoView.this, "Erro ao abrir projeto.");
                         }
                     }
                 }
             }
         });
 
-        // Botão de novo projeto
-        JButton novoProjetoBtn = new JButton("Novo Projeto");
-        novoProjetoBtn.addActionListener(e -> {
-            new CadastroProjetoView(this, projetoController);
-        });
-
+        // Painel de botões
         JPanel bottomPanel = new JPanel();
+
+        // Botão Novo
+        JButton novoProjetoBtn = new JButton("Novo Projeto");
+        novoProjetoBtn.addActionListener(e -> new CadastroProjetoView(this, projetoController));
         bottomPanel.add(novoProjetoBtn);
+
+        // Botão Editar
+        JButton editarProjetoBtn = new JButton("Editar Projeto");
+        editarProjetoBtn.addActionListener(e -> {
+            String selecionado = projetoList.getSelectedValue();
+            if (selecionado != null) {
+                int idProjeto = Integer.parseInt(selecionado.split(" - ")[0]);
+                Projeto projeto = projetoController.buscarProjetoPorId(idProjeto);
+                if (projeto != null) {
+                    new CadastroProjetoView(this, projetoController, projeto);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Projeto não encontrado.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Selecione um projeto para editar.");
+            }
+        });
+        bottomPanel.add(editarProjetoBtn);
+
+        // Botão Excluir
+        JButton excluirProjetoBtn = new JButton("Excluir Projeto");
+        excluirProjetoBtn.addActionListener(e -> {
+            String selecionado = projetoList.getSelectedValue();
+            if (selecionado != null) {
+                int idProjeto = Integer.parseInt(selecionado.split(" - ")[0]);
+                int confirm = JOptionPane.showConfirmDialog(this,
+                        "Deseja realmente excluir este projeto?",
+                        "Confirmação", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    projetoController.removerProjeto(idProjeto);
+                    carregarProjetos();
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Selecione um projeto para excluir.");
+            }
+        });
+        bottomPanel.add(excluirProjetoBtn);
+
         add(bottomPanel, BorderLayout.SOUTH);
 
         carregarProjetos();
         setVisible(true);
     }
 
+    // Recarrega a lista de projetos
     public void carregarProjetos() {
         projetoListModel.clear();
         List<Projeto> projetos = projetoController.listarProjetos();

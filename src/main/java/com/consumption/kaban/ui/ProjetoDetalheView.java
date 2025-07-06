@@ -44,6 +44,9 @@ public class ProjetoDetalheView extends JFrame {
 
         JButton metasBtn = new JButton("📌 Metas");
         metasBtn.addActionListener(e -> {
+            MetaFormularioView.exibirResumoDePrazosMetas(ProjetoDetalheView.this, projeto, metaController);
+
+
             new MetaDetalheView(this.projeto, metaController);
         });
         headerPanel.add(metasBtn, BorderLayout.EAST);
@@ -58,6 +61,7 @@ public class ProjetoDetalheView extends JFrame {
 
         add(kanbanPanel, BorderLayout.CENTER);
         carregarTarefas();
+        exibirResumoDePrazos();
         setVisible(true);
     }
 
@@ -153,6 +157,33 @@ public class ProjetoDetalheView extends JFrame {
             } else if (t.getStatus() == TarefaStatusEnum.FEITO) {
                 feitoModel.addElement(t);
             }
+        }
+    }
+
+    private void exibirResumoDePrazos() {
+        List<Tarefa> tarefas = tarefaController.listarTarefasPorProjeto(projeto.getId());
+
+        StringBuilder mensagem = new StringBuilder("\uD83D\uDCC5 Prazos das Tarefas:\n\n");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date hoje = new Date();
+        boolean temTarefaComPrazo = false;
+
+        for (Tarefa t : tarefas) {
+            if (t.getComPrazo() && t.getPrazo() != null) {
+                temTarefaComPrazo = true;
+                long diffMillis = t.getPrazo().getTime() - hoje.getTime();
+                long diasRestantes = diffMillis / (1000 * 60 * 60 * 24);
+
+                mensagem.append("• ").append(t.getTitulo()).append(" - Prazo: ")
+                        .append(sdf.format(t.getPrazo()))
+                        .append(" (Faltam ")
+                        .append(diasRestantes >= 0 ? diasRestantes + " dia(s)" : "VENCIDO")
+                        .append(")\n");
+            }
+        }
+
+        if (temTarefaComPrazo) {
+            JOptionPane.showMessageDialog(this, mensagem.toString(), "Tarefas com Prazo", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }

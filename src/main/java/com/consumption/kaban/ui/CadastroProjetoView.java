@@ -2,58 +2,79 @@ package com.consumption.kaban.ui;
 
 import com.consumption.kaban.controller.ProjetoController;
 import com.consumption.kaban.model.Projeto;
-import com.consumption.kaban.ui.ProjetoView;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class CadastroProjetoView extends JFrame {
+public class CadastroProjetoView extends JDialog {
     private JTextField nomeField;
     private JTextArea descricaoArea;
-    private ProjetoController projetoController;
+    private ProjetoController controller;
+    private Projeto projetoEditavel;
     private ProjetoView projetoView;
 
-    public CadastroProjetoView(ProjetoView projetoView, ProjetoController projetoController) {
-        super("Novo Projeto");
+    // Construtor para novo projeto
+    public CadastroProjetoView(ProjetoView parent, ProjetoController controller) {
+        this(parent, controller, null);
+    }
 
-        this.projetoView = projetoView;
-        this.projetoController = projetoController;
+    // Construtor para edição de projeto
+    public CadastroProjetoView(ProjetoView parent, ProjetoController controller, Projeto projeto) {
+        super(parent, true);
+        this.controller = controller;
+        this.projetoEditavel = projeto;
+        this.projetoView = parent;
 
+        setTitle(projeto == null ? "Novo Projeto" : "Editar Projeto");
         setSize(350, 250);
+        setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
-        setLocationRelativeTo(null);
 
-        JPanel formPanel = new JPanel(new GridLayout(4, 1));
-        formPanel.add(new JLabel("Nome:"));
         nomeField = new JTextField();
+        descricaoArea = new JTextArea(5, 20);
+        descricaoArea.setLineWrap(true);
+        descricaoArea.setWrapStyleWord(true);
+
+        if (projeto != null) {
+            nomeField.setText(projeto.getNome());
+            descricaoArea.setText(projeto.getDescricao());
+        }
+
+        JPanel formPanel = new JPanel(new GridLayout(4, 1, 5, 5));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        formPanel.add(new JLabel("Nome do Projeto:"));
         formPanel.add(nomeField);
-
         formPanel.add(new JLabel("Descrição:"));
-        descricaoArea = new JTextArea(3, 20);
         formPanel.add(new JScrollPane(descricaoArea));
-
         add(formPanel, BorderLayout.CENTER);
 
         JButton salvarBtn = new JButton("Salvar");
-        salvarBtn.addActionListener(e -> salvarProjeto());
-        add(salvarBtn, BorderLayout.SOUTH);
+        salvarBtn.addActionListener(e -> {
+            String nome = nomeField.getText().trim();
+            String descricao = descricaoArea.getText().trim();
+
+            if (nome.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "O nome do projeto não pode estar vazio.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (projetoEditavel == null) {
+                Projeto novo = new Projeto(nome, descricao);
+                controller.adicionarProjeto(novo);
+            } else {
+                projetoEditavel.setNome(nome);
+                projetoEditavel.setDescricao(descricao);
+                controller.atualizarProjeto(projetoEditavel);
+            }
+
+            projetoView.carregarProjetos();
+            dispose();
+        });
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(salvarBtn);
+        add(buttonPanel, BorderLayout.SOUTH);
 
         setVisible(true);
-    }
-
-    private void salvarProjeto() {
-        String nome = nomeField.getText().trim();
-        String desc = descricaoArea.getText().trim();
-
-        if (nome.isEmpty() || desc.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Preencha todos os campos.");
-            return;
-        }
-
-        Projeto projeto = new Projeto(nome, desc);
-        projetoController.adicionarProjeto(projeto);
-        JOptionPane.showMessageDialog(this, "Projeto criado com sucesso!");
-        projetoView.carregarProjetos();
-        dispose(); // fecha janela
     }
 }

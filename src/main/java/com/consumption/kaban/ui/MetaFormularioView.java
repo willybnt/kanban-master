@@ -9,8 +9,9 @@ import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
-public class MetaFormularioDialog extends JDialog {
+public class MetaFormularioView extends JDialog {
     private final Projeto projeto;
     private final MetaController metaController;
     private final Runnable aoAtualizar;
@@ -22,7 +23,7 @@ public class MetaFormularioDialog extends JDialog {
 
     private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-    public MetaFormularioDialog(JFrame parent, Projeto projeto, Meta meta, MetaController metaController, Runnable aoAtualizar) {
+    public MetaFormularioView(JFrame parent, Projeto projeto, Meta meta, MetaController metaController, Runnable aoAtualizar) {
         super(parent, meta == null ? "Nova Meta" : "Editar Meta", true);
         this.projeto = projeto;
         this.meta = meta;
@@ -126,4 +127,36 @@ public class MetaFormularioDialog extends JDialog {
             JOptionPane.showMessageDialog(this, "Erro ao salvar meta: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    public static void exibirResumoDePrazosMetas(Component parent, Projeto projeto, MetaController metaController) {
+        try {
+            List<Meta> metas = metaController.listarMetasPorProjeto(projeto.getId());
+
+            StringBuilder mensagem = new StringBuilder("\uD83D\uDCC5 Prazos das Metas:\n\n");
+            Date hoje = new Date();
+            boolean temMetaComPrazo = false;
+
+            for (Meta m : metas) {
+                if (!m.isConcluida() && m.getComPrazo() && m.getPrazo() != null) {
+                    temMetaComPrazo = true;
+                    long diffMillis = m.getPrazo().getTime() - hoje.getTime();
+                    long diasRestantes = diffMillis / (1000 * 60 * 60 * 24);
+
+                    mensagem.append("• ").append(m.getDescricao()).append(" - Prazo: ")
+                            .append(new SimpleDateFormat("dd/MM/yyyy").format(m.getPrazo()))
+                            .append(" (")
+                            .append(diasRestantes >= 0 ? "Faltam " + diasRestantes + " dia(s)" : "VENCIDO")
+                            .append(")\n");
+                }
+            }
+
+            if (temMetaComPrazo) {
+                JOptionPane.showMessageDialog(parent, mensagem.toString(), "Metas com Prazo", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
