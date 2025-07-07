@@ -19,24 +19,20 @@ public class ProjetoView extends JFrame {
     public ProjetoView() throws SQLException {
         super("Projetos");
 
-        // Configuração do DAO e Controller
         DAOFactory daoFactory = new DAOFactory();
         projetoController = new ProjetoController(daoFactory);
 
-        // Configurações da janela
         setSize(500, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
 
-        // Lista de projetos
         projetoListModel = new DefaultListModel<>();
         projetoList = new JList<>(projetoListModel);
         projetoList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPane = new JScrollPane(projetoList);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Duplo clique para abrir detalhes do projeto
         projetoList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -60,15 +56,12 @@ public class ProjetoView extends JFrame {
             }
         });
 
-        // Painel de botões
         JPanel bottomPanel = new JPanel();
 
-        // Botão Novo
         JButton novoProjetoBtn = new JButton("Novo Projeto");
         novoProjetoBtn.addActionListener(e -> new CadastroProjetoView(this, projetoController));
         bottomPanel.add(novoProjetoBtn);
 
-        // Botão Editar
         JButton editarProjetoBtn = new JButton("Editar Projeto");
         editarProjetoBtn.addActionListener(e -> {
             String selecionado = projetoList.getSelectedValue();
@@ -86,7 +79,6 @@ public class ProjetoView extends JFrame {
         });
         bottomPanel.add(editarProjetoBtn);
 
-        // Botão Excluir
         JButton excluirProjetoBtn = new JButton("Excluir Projeto");
         excluirProjetoBtn.addActionListener(e -> {
             String selecionado = projetoList.getSelectedValue();
@@ -111,7 +103,6 @@ public class ProjetoView extends JFrame {
         setVisible(true);
     }
 
-    // Recarrega a lista de projetos
     public void carregarProjetos() {
         projetoListModel.clear();
         List<Projeto> projetos = projetoController.listarProjetos();

@@ -33,14 +33,12 @@ public class Meta {
 
 
 
-    // Construtor sem ID (útil para novos registros)
     public Meta(String descricao, Date prazo,boolean concluida) {
         this.descricao = descricao;
         this.prazo = prazo;
         this.concluida = concluida;
     }
 
-    // Getters e Setters
     public int getId() {
         return id;
     }

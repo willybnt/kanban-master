@@ -15,7 +15,7 @@ public class MetaFormularioView extends JDialog {
     private final Projeto projeto;
     private final MetaController metaController;
     private final Runnable aoAtualizar;
-    private final Meta meta;  // Pode ser null (para novo)
+    private final Meta meta;
 
     private JTextField descricaoField;
     private JCheckBox comPrazoCheck;

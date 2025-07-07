@@ -10,7 +10,7 @@ public class DAOFactory {
     private final Connection conn;
 
     public DAOFactory() throws SQLException {
-        this.conn = MyJdbc.getConnection(); // sua classe de conexão ao banco
+        this.conn = MyJdbc.getConnection();
     }
 
     public ProjetoDAO getProjetoDAO() {

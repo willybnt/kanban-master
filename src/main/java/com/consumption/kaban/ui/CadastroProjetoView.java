@@ -13,12 +13,10 @@ public class CadastroProjetoView extends JDialog {
     private Projeto projetoEditavel;
     private ProjetoView projetoView;
 
-    // Construtor para novo projeto
     public CadastroProjetoView(ProjetoView parent, ProjetoController controller) {
         this(parent, controller, null);
     }
 
-    // Construtor para edição de projeto
     public CadastroProjetoView(ProjetoView parent, ProjetoController controller, Projeto projeto) {
         super(parent, true);
         this.controller = controller;

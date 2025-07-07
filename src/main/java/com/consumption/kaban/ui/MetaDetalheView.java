@@ -76,10 +76,8 @@ public class MetaDetalheView extends JFrame {
                     "",
                     index, isSelected, cellHasFocus);
 
-            // Símbolo check para metas concluídas
             String check = meta.isConcluida() ? "✅ " : "";
 
-            // Construção do texto com prazo se tiver
             StringBuilder sb = new StringBuilder("<html>");
             sb.append(check).append("<b>").append(meta.getDescricao()).append("</b>");
             if (meta.getComPrazo() && meta.getPrazo() != null) {

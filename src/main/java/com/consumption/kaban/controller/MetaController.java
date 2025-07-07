@@ -14,7 +14,6 @@ public class MetaController {
         this.metaDAO = daoFactory.getMetaDAO();
     }
 
-    // Salvar nova meta em um projeto
     public void adicionarMeta(Meta meta, int projetoId) {
         try {
             metaDAO.salvar(meta, projetoId);
@@ -24,7 +23,6 @@ public class MetaController {
         }
     }
 
-    // Listar todas as metas de um projeto
     public List<Meta> listarMetasPorProjeto(int projetoId) {
         try {
             return metaDAO.buscarPorProjeto(projetoId);
@@ -34,7 +32,6 @@ public class MetaController {
         }
     }
 
-    // Buscar uma meta pelo ID
     public Meta buscarMetaPorId(int id) {
         try {
             return metaDAO.buscarPorId(id);
@@ -44,7 +41,6 @@ public class MetaController {
         }
     }
 
-    // Atualizar dados de uma meta
     public void atualizarMeta(Meta meta) {
         try {
             metaDAO.atualizar(meta);
@@ -54,7 +50,6 @@ public class MetaController {
         }
     }
 
-    // Remover meta por ID
     public void removerMeta(int id) {
         try {
             metaDAO.remover(id);

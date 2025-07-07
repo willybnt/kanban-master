@@ -27,20 +27,19 @@ public class TarefaDetalheView extends JDialog {
         setSize(600, 400);
         setLocationRelativeTo(parent);
 
-        // Painel com os detalhes
         JPanel painel = new JPanel(new GridLayout(0, 1, 10, 10));
         painel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         painel.add(new JLabel("Título:"));
         JTextField tituloField = new JTextField(tarefa.getTitulo());
-        tituloField.setPreferredSize(new Dimension(200, 30)); // largura 200, altura 30
+        tituloField.setPreferredSize(new Dimension(200, 30));
         painel.add(tituloField);
         
         painel.add(new JLabel("Descrição:"));
         JTextArea descricaoArea = new JTextArea(tarefa.getDescricao());
         descricaoArea.setLineWrap(true);
         descricaoArea.setWrapStyleWord(true);
-        painel.add(new JScrollPane(descricaoArea)); // com scroll automático se necessário
+        painel.add(new JScrollPane(descricaoArea));
             
         painel.add(new JLabel("Prazo:"));
         JTextField prazoField = new JTextField();
@@ -51,13 +50,11 @@ public class TarefaDetalheView extends JDialog {
         } else {
             painel.add(new JLabel("Sem prazo definido"));}
 
-        // ComboBox para mudar status
         painel.add(new JLabel("Status:"));
         JComboBox<TarefaStatusEnum> statusCombo = new JComboBox<>(TarefaStatusEnum.values());
         statusCombo.setSelectedItem(tarefa.getStatus());
         painel.add(statusCombo);
 
-        // Botões
         JButton salvarBtn = new JButton("Salvar");
         salvarBtn.addActionListener(e -> {
             try {
