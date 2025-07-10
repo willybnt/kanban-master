@@ -7,8 +7,8 @@ import java.sql.SQLException;
     public class MyJdbc {
         public static Connection getConnection() throws SQLException {
             String url = "jdbc:mysql://localhost:3306/kanban";
-            String user = "";
-            String password = "";
+            String user = "root";
+            String password = "1234";
             return DriverManager.getConnection(url, user, password);
         }
     }
